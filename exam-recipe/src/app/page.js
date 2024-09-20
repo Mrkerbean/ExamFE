@@ -5,8 +5,9 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, '') || 'http://localhost:5000';
-
-console.log('API URL:', API_URL); // This will help you confirm the correct URL is being used
+console.log('API URL:', API_URL);
+console.log('NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL);
+console.log('NODE_ENV:', process.env.NODE_ENV)
 export default function Home() {
   const [recipes, setRecipes] = useState([]);
   const [ingredients, setIngredients] = useState('');
