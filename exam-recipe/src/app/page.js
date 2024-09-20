@@ -20,7 +20,8 @@ export default function Home() {
     setLoading(false);
   };
 
-  const filterRecipes = async () => {
+  const filterRecipes = async (e) => {
+    e.preventDefault(); // Add this line to prevent form submission
     setLoading(true);
     const ingredientList = ingredients.split(',').map(i => i.trim());
     console.log('Filtering with ingredients:', ingredientList); // Debug log
@@ -39,48 +40,66 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-4">Recipe Randomizer</h1>
-      <div className="mb-4">
-        <button 
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
-          onClick={getRandomRecipe}
-        >
-          Get Random Recipe
-        </button>
-        <input 
-          type="text" 
-          value={ingredients} 
-          onChange={(e) => setIngredients(e.target.value)} 
-          placeholder="Enter ingredients, separated by commas"
-          className="border p-2 rounded"
-        />
-        <button 
-          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ml-2"
-          onClick={filterRecipes}
-        >
-          Filter Recipes
-        </button>
-      </div>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <div>
-          {recipes.map((recipe, index) => (
-            <div key={index} className="mb-4 p-4 border rounded">
-              <h2 className="text-2xl font-bold">{recipe.name}</h2>
-              <h3 className="text-xl font-semibold mt-2">Ingredients:</h3>
-              <ul className="list-disc pl-5">
-                {recipe.ingredients.map((ingredient, i) => (
-                  <li key={i}>{ingredient}</li>
-                ))}
-              </ul>
-              <h3 className="text-xl font-semibold mt-2">Instructions:</h3>
-              <p>{recipe.instructions}</p>
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center">
+      <main className="container mx-auto px-4 py-8 max-w-4xl w-full">
+        <h1 className="text-4xl md:text-5xl font-extrabold text-center text-indigo-900 mb-10">
+          Recipe Randomizer
+        </h1>
+        
+        <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+          <div className="flex flex-col md:flex-row gap-4 mb-6">
+            <button 
+              className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
+              onClick={getRandomRecipe}
+            >
+              Get Random Recipe
+            </button>
+            <div className="flex-1 flex">
+              <input 
+                type="text" 
+                value={ingredients} 
+                onChange={(e) => setIngredients(e.target.value)} 
+                placeholder="Enter ingredients, separated by commas"
+                className="flex-grow border-2 border-gray-300 p-3 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              />
+              <button 
+                className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-r-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+                onClick={filterRecipes}
+              >
+                Filter
+              </button>
             </div>
-          ))}
+          </div>
         </div>
-      )}
-    </main>
+
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-indigo-600"></div>
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-2 gap-8">
+            {recipes.map((recipe, index) => (
+              <div key={index} className="bg-white rounded-xl shadow-lg overflow-hidden transition duration-300 ease-in-out transform hover:scale-105">
+                <div className="p-6">
+                  <h2 className="text-2xl font-bold text-indigo-900 mb-4">{recipe.name}</h2>
+                  <div className="mb-4">
+                    <h3 className="text-xl font-semibold text-indigo-700 mb-2">Ingredients:</h3>
+                    <ul className="list-disc pl-5 space-y-1 text-gray-700">
+                      {recipe.ingredients.map((ingredient, i) => (
+                        <li key={i}>{ingredient}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-indigo-700 mb-2">Instructions:</h3>
+                    <p className="text-gray-700 whitespace-pre-line">{recipe.instructions}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </main>
+    </div>
   );
 }
