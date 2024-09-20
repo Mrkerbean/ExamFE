@@ -4,6 +4,9 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, '') || 'http://localhost:5000';
+
+console.log('API URL:', API_URL); // This will help you confirm the correct URL is being used
 export default function Home() {
   const [recipes, setRecipes] = useState([]);
   const [ingredients, setIngredients] = useState('');
@@ -12,7 +15,7 @@ export default function Home() {
   const getRandomRecipe = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('http://localhost:5000/api/recipes/random');
+      const res = await axios.get(`${API_URL}/api/recipes/random`);
       setRecipes([res.data]);
     } catch (error) {
       console.error('Error fetching random recipe:', error);
@@ -26,7 +29,7 @@ export default function Home() {
     const ingredientList = ingredients.split(',').map(i => i.trim());
     console.log('Filtering with ingredients:', ingredientList); // Debug log
     try {
-      const res = await axios.post('http://localhost:5000/api/recipes/filter', { ingredients: ingredientList });
+      const res = await axios.post(`${API_URL}/api/recipes/filter`, { ingredients: ingredientList });
       console.log('Filter response:', res.data); // Debug log
       setRecipes(res.data);
     } catch (error) {
